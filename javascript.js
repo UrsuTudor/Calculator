@@ -39,9 +39,38 @@ function operate(operator, firstOperand, secondOperand) {
 
 console.log(operate('/', 5, 7))
 
-const buttons = document.querySelectorAll('button');
-const display = document.querySelector('#display')
+const buttons = document.querySelectorAll('.operation-button');
+const display = document.querySelector('#display');
+let displayValue;
 
 buttons.forEach((button) => {
-    button.addEventListener('click', () => {display.textContent += ' ' + button.textContent})
+    button.addEventListener('click', () => {
+        display.textContent += button.textContent;
+        displayValue = display.textContent;
+        getOperationElements(displayValue);
+    })
 })
+
+function getOperationElements(string) {
+    let displayValue = string;
+    let elementsArray = Array.from(displayValue);
+
+    let firstOperand = '';
+    let secondOperand = '';
+    let operator;
+
+    let numbers = '123456789'
+    elementsArray.forEach((element) => {
+        if (numbers.includes(element) && !operator) {
+            firstOperand += element;
+        } else if (!numbers.includes(element)) {
+            operator = element;
+        } else if (operator) {
+            secondOperand += element;
+        }
+    })
+
+    let operationElements = [operator, firstOperand, secondOperand]
+    return operationElements;
+}
+
