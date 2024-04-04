@@ -14,10 +14,6 @@ function divide(a, b) {
     return a / b;
 }
 
-let firstOperand;
-let secondOperand;
-let operator;
-
 function operate(operator, firstOperand, secondOperand) {
     switch (operator) {
         case '+':
@@ -37,8 +33,6 @@ function operate(operator, firstOperand, secondOperand) {
     }
 }
 
-console.log(operate('/', 5, 7))
-
 const buttons = document.querySelectorAll('.operation-button');
 const display = document.querySelector('#display');
 let displayValue;
@@ -47,20 +41,24 @@ buttons.forEach((button) => {
     button.addEventListener('click', () => {
         display.textContent += button.textContent;
         displayValue = display.textContent;
-        getOperationElements(displayValue);
     })
 })
 
+let operationElements
+
 function getOperationElements(string) {
-    let displayValue = string;
-    let elementsArray = Array.from(displayValue);
+    let operationAsString = string;
+    let operationElementsArray = Array.from(operationAsString);
 
     let firstOperand = '';
     let secondOperand = '';
     let operator;
 
-    let numbers = '123456789'
-    elementsArray.forEach((element) => {
+    let numbers = '0123456789';
+
+    //if the element is a number and an operator has not been declared yet, the number/numbers will be added to the first operand; 
+    //if an operator was already declared, the number/numbers will be added to the second operand, since it means the first one was already declared;
+    operationElementsArray.forEach((element) => {
         if (numbers.includes(element) && !operator) {
             firstOperand += element;
         } else if (!numbers.includes(element)) {
@@ -69,8 +67,16 @@ function getOperationElements(string) {
             secondOperand += element;
         }
     })
-
-    let operationElements = [operator, firstOperand, secondOperand]
+    
+    operationElements = [operator, parseInt(firstOperand), parseInt(secondOperand)];
     return operationElements;
 }
 
+const equalsBtn = document.querySelector('#equals');
+
+equalsBtn.addEventListener('click', () => {
+    getOperationElements(displayValue);
+
+    let result = operate(operationElements[0], operationElements[1], operationElements[2]);
+    display.textContent = result;
+})
