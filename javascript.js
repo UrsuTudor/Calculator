@@ -58,18 +58,20 @@ function getOperationElements(string) {
     let secondOperand = '';
     let operator;
 
-    let numbers = '0123456789.';
+    let numbers = '0123456789.-';
 
     //if the element is a number and an operator has not been declared yet, the number/numbers will be added to the first operand; 
     //if an operator was already declared, the number/numbers will be added to the second operand, since it means the first one was already declared;
     operationElementsArray.forEach((element) => {
-        if (numbers.includes(element) && !operator) {
+        if (element == '-' && firstOperand.includes('-')){
+            operator = element
+        } else if (numbers.includes(element) && !operator) {
             firstOperand += element;
             if (firstOperand.includes('.')) {floatingPointBtn.disabled = true};
         } else if (!numbers.includes(element)) {
             operator = element;
             floatingPointBtn.disabled = false;
-        } else if (operator) {
+        } else if (operator && numbers.includes(element)) {
             secondOperand += element;
             if (secondOperand.includes('.')) {floatingPointBtn.disabled = true};
         }
