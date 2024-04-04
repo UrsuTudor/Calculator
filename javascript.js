@@ -41,10 +41,14 @@ buttons.forEach((button) => {
     button.addEventListener('click', () => {
         display.textContent += button.textContent;
         displayValue = display.textContent;
+        getOperationElements(displayValue);
     })
 })
 
-let operationElements
+let operationElements;
+
+let floatingPointBtn = document.querySelector('#floating-point');
+
 
 function getOperationElements(string) {
     let operationAsString = string;
@@ -61,29 +65,30 @@ function getOperationElements(string) {
     operationElementsArray.forEach((element) => {
         if (numbers.includes(element) && !operator) {
             firstOperand += element;
+            if (firstOperand.includes('.')) {floatingPointBtn.disabled = true};
         } else if (!numbers.includes(element)) {
             operator = element;
+            floatingPointBtn.disabled = false;
         } else if (operator) {
             secondOperand += element;
+            if (secondOperand.includes('.')) {floatingPointBtn.disabled = true};
         }
     })
-    
+
     operationElements = [operator, parseFloat(firstOperand), parseFloat(secondOperand)];
 }
 
 const equalsBtn = document.querySelector('#equals');
 
 equalsBtn.addEventListener('click', () => {
-    getOperationElements(displayValue);
-
     let result = operate(operationElements[0], operationElements[1], operationElements[2]);
     display.textContent = parseFloat(result.toFixed(5))
     if (operationElements[0] == '/' && operationElements[2] == 0){display.textContent = 'Sorry, that is not a valid operation.'}
-
 })
 
 const clearBtn = document.querySelector('#clear-btn');
 
 clearBtn.addEventListener('click', () => {
     display.textContent = '';
+    floatingPointBtn.disabled = false;
 })
