@@ -54,7 +54,7 @@ function getOperationElements(string) {
     let secondOperand = '';
     let operator;
 
-    let numbers = '0123456789';
+    let numbers = '0123456789.';
 
     //if the element is a number and an operator has not been declared yet, the number/numbers will be added to the first operand; 
     //if an operator was already declared, the number/numbers will be added to the second operand, since it means the first one was already declared;
@@ -68,7 +68,7 @@ function getOperationElements(string) {
         }
     })
     
-    operationElements = [operator, parseInt(firstOperand), parseInt(secondOperand)];
+    operationElements = [operator, parseFloat(firstOperand), parseFloat(secondOperand)];
 }
 
 const equalsBtn = document.querySelector('#equals');
@@ -77,7 +77,7 @@ equalsBtn.addEventListener('click', () => {
     getOperationElements(displayValue);
 
     let result = operate(operationElements[0], operationElements[1], operationElements[2]);
-    display.textContent = Math.round(result * 100) / 100;
+    display.textContent = parseFloat(result.toFixed(5))
     if (operationElements[0] == '/' && operationElements[2] == 0){display.textContent = 'Sorry, that is not a valid operation.'}
 
 })
