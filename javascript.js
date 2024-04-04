@@ -69,7 +69,6 @@ function getOperationElements(string) {
     })
     
     operationElements = [operator, parseInt(firstOperand), parseInt(secondOperand)];
-    return operationElements;
 }
 
 const equalsBtn = document.querySelector('#equals');
@@ -78,5 +77,11 @@ equalsBtn.addEventListener('click', () => {
     getOperationElements(displayValue);
 
     let result = operate(operationElements[0], operationElements[1], operationElements[2]);
-    display.textContent = result;
+    display.textContent = Math.round(result * 100) / 100;
+})
+
+const clearBtn = document.querySelector('#clear-btn');
+
+clearBtn.addEventListener('click', () => {
+    display.textContent = '';
 })
