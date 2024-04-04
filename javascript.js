@@ -78,6 +78,8 @@ equalsBtn.addEventListener('click', () => {
 
     let result = operate(operationElements[0], operationElements[1], operationElements[2]);
     display.textContent = Math.round(result * 100) / 100;
+    if (operationElements[0] == '/' && operationElements[2] == 0){display.textContent = 'Sorry, that is not a valid operation.'}
+
 })
 
 const clearBtn = document.querySelector('#clear-btn');
