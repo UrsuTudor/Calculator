@@ -50,12 +50,8 @@ function regulateDecimals(keyPressed) {
     if (keyPressed.keyCode == 189 || keyPressed.keyCode == 187 || keyPressed.keyCode == 191 || keyPressed.keyCode == 56) {
         decimalCount = 0;
     }
-
-    if (operationElements[1].toString().includes('.') && keyPressed.keyCode == 190) {
-        display.value += '.';
-        displayValue = Array.from(display.value);
-        displayValue.pop();
-        display.value = displayValue.join('');
+    if (!operationElements[1].toString().includes('.') && keyPressed.keyCode == 8) {
+        decimalCount = 0;
     }
 }
 
@@ -64,6 +60,7 @@ display.addEventListener('keyup', (keyPressed) => {
     if (!event.shiftKey && keyPressed.keyCode == 187 || keyPressed.keyCode == 13) {getResult()};
 
     displayValue = display.value;
+    
     getOperationElements(displayValue);
     regulateDecimals(keyPressed);
 });
@@ -79,6 +76,8 @@ buttons.forEach((button) => {
 let operationElements;
 
 let floatingPointBtn = document.querySelector('#floating-point');
+
+floatingPointBtn.addEventListener('click', () => {decimalCount++})
 
 
 function getOperationElements(string) {
@@ -100,7 +99,6 @@ function getOperationElements(string) {
             firstOperand += element;
             if (firstOperand.includes('.')) {
                 floatingPointBtn.disabled = true;
-                
             };
         } else if (!numbers.includes(element)) {
             operator = element;
