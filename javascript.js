@@ -37,12 +37,19 @@ const buttons = document.querySelectorAll('.operation-button');
 const display = document.querySelector('#display');
 let displayValue;
 
+display.addEventListener('keyup', (keyPressed) => {
+    if (!event.shiftKey && keyPressed.keyCode == 187) {getResult()};
+    displayValue = display.value;
+    getOperationElements(displayValue);
+    console.log(keyPressed.keyCode)
+});
+
 buttons.forEach((button) => {
     button.addEventListener('click', () => {
-        display.textContent += button.textContent;
-        displayValue = display.textContent;
+        display.value += button.textContent;
+        displayValue = display.value;
         getOperationElements(displayValue);
-    })
+    });
 })
 
 let operationElements;
@@ -82,24 +89,26 @@ function getOperationElements(string) {
 
 const equalsBtn = document.querySelector('#equals');
 
-equalsBtn.addEventListener('click', () => {
+function getResult() {
     let result = operate(operationElements[0], operationElements[1], operationElements[2]);
-    display.textContent = parseFloat(result.toFixed(5))
+    display.value = parseFloat(result.toFixed(5))
     if (operationElements[0] == '/' && operationElements[2] == 0){display.textContent = 'Sorry, that is not a valid operation.'}
-})
+}
+
+equalsBtn.addEventListener('click', () => {getResult()})
 
 const clearBtn = document.querySelector('#clear-btn');
 
 clearBtn.addEventListener('click', () => {
-    display.textContent = '';
+    display.value = '';
     floatingPointBtn.disabled = false;
 })
 
 let backspaceBtn = document.querySelector('#backspace');
 
 backspaceBtn.addEventListener('click', () => {
-    let displayAsArray = Array.from(display.textContent);
+    let displayAsArray = Array.from(display.value);
     displayAsArray.pop();
-    display.textContent = displayAsArray.join('');
+    display.value = displayAsArray.join('');
     event.stopPropagation();
 })
