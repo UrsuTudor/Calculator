@@ -36,62 +36,8 @@ function operate(operator, firstOperand, secondOperand) {
 const buttons = document.querySelectorAll('.operation-button');
 const display = document.querySelector('#display');
 let displayValue;
-let decimalCount = 0;
-
-function regulateDecimals(keyPressed) {
-    //ups decimalCount when '.' is pressed
-    if (keyPressed.keyCode == 190) {decimalCount++};
-    
-    if (decimalCount > 1 && keyPressed.keyCode == 190) {
-        displayValue = Array.from(display.value);
-        displayValue.pop();
-        display.value = displayValue.join('');
-    }
-
-    //resets decimalCount when an operator is added, ensuring that a decimal can be added to the 2nd operand 
-    if (keyPressed.keyCode == 189 || keyPressed.keyCode == 187 || keyPressed.keyCode == 191 || keyPressed.keyCode == 56) {decimalCount = 0;}
-
-    //ensures that 2 decimals cannot be added to the 1st operand by adding one operand to reset the decimalCount and removing the operand with backspace
-    if (!operationElements[1].toString().includes('.') && operationElements[0] == undefined) {
-        decimalCount = 0; 
-        floatingPointBtn.disabled = false
-    }
-    if (operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 1;}
-
-    if (!operationElements[2].toString().includes('.') && operationElements[0]) {
-        decimalCount = 0; 
-        floatingPointBtn.disabled = false
-    }
-    if (operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 1;}
-
-    console.log(decimalCount)
-}
-
-display.addEventListener('keyup', (keyPressed) => {
-    //keyCodes are for '=' or 'ENTER'
-    if (!event.shiftKey && keyPressed.keyCode == 187 || keyPressed.keyCode == 13) {getResult()};
-
-    displayValue = display.value;
-    
-    getOperationElements(displayValue);
-    regulateDecimals(keyPressed);
-});
-
-buttons.forEach((button) => {
-    button.addEventListener('click', () => {
-        display.value += button.textContent;
-        displayValue = display.value;
-        getOperationElements(displayValue);
-    });
-})
 
 let operationElements;
-
-let floatingPointBtn = document.querySelector('#floating-point');
-
-floatingPointBtn.addEventListener('click', () => {decimalCount++})
-
-
 
 function getOperationElements(string) {
     let operationAsString = string;
@@ -106,6 +52,7 @@ function getOperationElements(string) {
     //if the element is a number and an operator has not been declared yet, the number/numbers will be added to the first operand; 
     //if an operator was already declared, the number/numbers will be added to the second operand, since it means the first one was already declared;
     operationElementsArray.forEach((element) => {
+        //first if statement manages negative numbers by adding '-' to the operator if the firstOperand was already declared
         if (element == '-' && firstOperand.includes('-') || element == '-' && firstOperand){
             operator = element;
         } else if (numbers.includes(element) && !operator) {
@@ -123,11 +70,40 @@ function getOperationElements(string) {
         }
     })
 
-    // operationElements = [operator, parseFloat(firstOperand), parseFloat(secondOperand)];
     operationElements = [operator, firstOperand, secondOperand];
 }
 
-const equalsBtn = document.querySelector('#equals');
+let floatingPointBtn = document.querySelector('#floating-point');
+let decimalCount = 0;
+
+floatingPointBtn.addEventListener('click', () => {decimalCount++})
+
+function regulateDecimals(keyPressed) {
+    //keyCode 190 belongs to '.'
+    if (keyPressed.keyCode == 190) {decimalCount++};
+    
+    if (decimalCount > 1 && keyPressed.keyCode == 190) {
+        displayValue = Array.from(display.value);
+        displayValue.pop();
+        display.value = displayValue.join('');
+    }
+
+    //resets decimalCount when an operator is added, ensuring that a decimal can be added to the 2nd operand 
+    if (keyPressed.keyCode == 189 || keyPressed.keyCode == 187 || keyPressed.keyCode == 191 || keyPressed.keyCode == 56) {decimalCount = 0;}
+
+    //ensures that 2 decimals cannot be added to the operand by adding one operator to reset the decimalCount and removing the operator with backspace
+    if (!operationElements[1].toString().includes('.') && operationElements[0] == undefined) {
+        decimalCount = 0; 
+        floatingPointBtn.disabled = false
+    }
+    if (operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 1;}
+
+    if (!operationElements[2].toString().includes('.') && operationElements[0]) {
+        decimalCount = 0; 
+        floatingPointBtn.disabled = false
+    }
+    if (operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 1;}
+}
 
 function getResult() {
     let result = operate(operationElements[0], parseFloat(operationElements[1]), parseFloat(operationElements[2]));
@@ -135,7 +111,28 @@ function getResult() {
     if (operationElements[0] == '/' && operationElements[2] == 0){display.value = 'Sorry, that is not a valid operation.'}
 }
 
-equalsBtn.addEventListener('click', () => {getResult()})
+//button functionality
+buttons.forEach((button) => {
+    button.addEventListener('click', () => {
+        display.value += button.textContent;
+        displayValue = display.value;
+        getOperationElements(displayValue);
+    });
+})
+
+//keyboard functionality
+display.addEventListener('keyup', (keyPressed) => {
+    //keyCodes are for '=' or 'ENTER'
+    if (!event.shiftKey && keyPressed.keyCode == 187 || keyPressed.keyCode == 13) {getResult()};
+
+    displayValue = display.value;
+    
+    getOperationElements(displayValue);
+    regulateDecimals(keyPressed);
+});
+
+const equalsBtn = document.querySelector('#equals');
+equalsBtn.addEventListener('click', () => {getResult()});
 
 const clearBtn = document.querySelector('#clear-btn');
 
