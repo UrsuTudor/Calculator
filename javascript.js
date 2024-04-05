@@ -52,10 +52,16 @@ function regulateDecimals(keyPressed) {
     if (keyPressed.keyCode == 189 || keyPressed.keyCode == 187 || keyPressed.keyCode == 191 || keyPressed.keyCode == 56) {decimalCount = 0;}
 
     //ensures that 2 decimals cannot be added to the 1st operand by adding one operand to reset the decimalCount and removing the operand with backspace
+    if (!operationElements[1].toString().includes('.') && operationElements[0] == undefined) {
+        decimalCount = 0; 
+        floatingPointBtn.disabled = false
+    }
     if (operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 1;}
-    if (!operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 0;}
 
-    if (!operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 0;}
+    if (!operationElements[2].toString().includes('.') && operationElements[0]) {
+        decimalCount = 0; 
+        floatingPointBtn.disabled = false
+    }
     if (operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 1;}
 
     console.log(decimalCount)
