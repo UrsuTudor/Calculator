@@ -96,3 +96,10 @@ clearBtn.addEventListener('click', () => {
 })
 
 let backspaceBtn = document.querySelector('#backspace');
+
+backspaceBtn.addEventListener('click', () => {
+    let displayAsArray = Array.from(display.textContent);
+    displayAsArray.pop();
+    display.textContent = displayAsArray.join('');
+    event.stopPropagation();
+})
