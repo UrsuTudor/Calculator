@@ -36,22 +36,36 @@ function operate(operator, firstOperand, secondOperand) {
 const buttons = document.querySelectorAll('.operation-button');
 const display = document.querySelector('#display');
 let displayValue;
-let decimalCount = 0
+let decimalCount = 0;
 
-display.addEventListener('keyup', (keyPressed) => {
-    if (!event.shiftKey && keyPressed.keyCode == 187) {getResult()};
-
+function regulateDecimals(keyPressed) {
     if (keyPressed.keyCode == 190) {decimalCount++};
     console.log(decimalCount)
     if (decimalCount > 1 && keyPressed.keyCode == 190) {
         displayValue = Array.from(display.value);
         displayValue.pop();
-        display.value = displayValue.join('')
+        display.value = displayValue.join('');
     }
+
+    if (keyPressed.keyCode == 189 || keyPressed.keyCode == 187 || keyPressed.keyCode == 191 || keyPressed.keyCode == 56) {
+        decimalCount = 0;
+    }
+
+    if (operationElements[1].toString().includes('.') && keyPressed.keyCode == 190) {
+        display.value += '.';
+        displayValue = Array.from(display.value);
+        displayValue.pop();
+        display.value = displayValue.join('');
+    }
+}
+
+display.addEventListener('keyup', (keyPressed) => {
+    //keyCodes are for '=' or 'ENTER'
+    if (!event.shiftKey && keyPressed.keyCode == 187 || keyPressed.keyCode == 13) {getResult()};
 
     displayValue = display.value;
     getOperationElements(displayValue);
-    console.log(keyPressed.keyCode)
+    regulateDecimals(keyPressed);
 });
 
 buttons.forEach((button) => {
@@ -86,7 +100,7 @@ function getOperationElements(string) {
             firstOperand += element;
             if (firstOperand.includes('.')) {
                 floatingPointBtn.disabled = true;
-                decimalCount++;
+                
             };
         } else if (!numbers.includes(element)) {
             operator = element;
@@ -104,8 +118,8 @@ const equalsBtn = document.querySelector('#equals');
 
 function getResult() {
     let result = operate(operationElements[0], operationElements[1], operationElements[2]);
-    display.value = parseFloat(result.toFixed(5))
-    if (operationElements[0] == '/' && operationElements[2] == 0){display.textContent = 'Sorry, that is not a valid operation.'}
+    display.value = parseFloat(result.toFixed(5));
+    if (operationElements[0] == '/' && operationElements[2] == 0){display.value = 'Sorry, that is not a valid operation.'}
 }
 
 equalsBtn.addEventListener('click', () => {getResult()})
