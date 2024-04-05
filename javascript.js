@@ -53,10 +53,10 @@ function regulateDecimals(keyPressed) {
 
     //ensures that 2 decimals cannot be added to the 1st operand by adding one operand to reset the decimalCount and removing the operand with backspace
     if (operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 1;}
-    if (!operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 0; console.log('no decimal')}
-    if (operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 1; console.log('decimal')}
+    if (!operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 0;}
 
-    console.log(operationElements[2])
+    if (!operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 0;}
+    if (operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 1;}
 
     console.log(decimalCount)
 }
