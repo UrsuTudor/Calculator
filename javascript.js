@@ -39,21 +39,26 @@ let displayValue;
 let decimalCount = 0;
 
 function regulateDecimals(keyPressed) {
+    //ups decimalCount when '.' is pressed
     if (keyPressed.keyCode == 190) {decimalCount++};
-    console.log(decimalCount)
+    
     if (decimalCount > 1 && keyPressed.keyCode == 190) {
         displayValue = Array.from(display.value);
         displayValue.pop();
         display.value = displayValue.join('');
     }
 
-    if (keyPressed.keyCode == 189 || keyPressed.keyCode == 187 || keyPressed.keyCode == 191 || keyPressed.keyCode == 56) {
-        decimalCount = 0;
-    }
-    if (!operationElements[1].toString().includes('.') && keyPressed.keyCode == 8 && !displayValue.includes('.')) {
-        decimalCount = 0;
-        console.log(decimalCount)
-    } else if (operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 1;}
+    //resets decimalCount when an operator is added, ensuring that a decimal can be added to the 2nd operand 
+    if (keyPressed.keyCode == 189 || keyPressed.keyCode == 187 || keyPressed.keyCode == 191 || keyPressed.keyCode == 56) {decimalCount = 0;}
+
+    //ensures that 2 decimals cannot be added to the 1st operand by adding one operand to reset the decimalCount and removing the operand with backspace
+    if (operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 1;}
+    if (!operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 0; console.log('no decimal')}
+    if (operationElements[2].toString().includes('.') && operationElements[0]) {decimalCount = 1; console.log('decimal')}
+
+    console.log(operationElements[2])
+
+    console.log(decimalCount)
 }
 
 display.addEventListener('keyup', (keyPressed) => {
@@ -81,15 +86,16 @@ let floatingPointBtn = document.querySelector('#floating-point');
 floatingPointBtn.addEventListener('click', () => {decimalCount++})
 
 
+
 function getOperationElements(string) {
     let operationAsString = string;
     let operationElementsArray = Array.from(operationAsString);
 
+    let numbers = '0123456789.-';
+
     let firstOperand = '';
     let secondOperand = '';
     let operator;
-
-    let numbers = '0123456789.-';
 
     //if the element is a number and an operator has not been declared yet, the number/numbers will be added to the first operand; 
     //if an operator was already declared, the number/numbers will be added to the second operand, since it means the first one was already declared;
@@ -106,17 +112,19 @@ function getOperationElements(string) {
             floatingPointBtn.disabled = false;
         } else if (operator && numbers.includes(element)) {
             secondOperand += element;
-            if (secondOperand.includes('.')) {floatingPointBtn.disabled = true};
+            if (secondOperand.includes('.')) {
+                floatingPointBtn.disabled = true};
         }
     })
 
-    operationElements = [operator, parseFloat(firstOperand), parseFloat(secondOperand)];
+    // operationElements = [operator, parseFloat(firstOperand), parseFloat(secondOperand)];
+    operationElements = [operator, firstOperand, secondOperand];
 }
 
 const equalsBtn = document.querySelector('#equals');
 
 function getResult() {
-    let result = operate(operationElements[0], operationElements[1], operationElements[2]);
+    let result = operate(operationElements[0], parseFloat(operationElements[1]), parseFloat(operationElements[2]));
     display.value = parseFloat(result.toFixed(5));
     if (operationElements[0] == '/' && operationElements[2] == 0){display.value = 'Sorry, that is not a valid operation.'}
 }
