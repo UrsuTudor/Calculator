@@ -63,8 +63,8 @@ function getOperationElements(string) {
     //if the element is a number and an operator has not been declared yet, the number/numbers will be added to the first operand; 
     //if an operator was already declared, the number/numbers will be added to the second operand, since it means the first one was already declared;
     operationElementsArray.forEach((element) => {
-        if (element == '-' && firstOperand.includes('-')){
-            operator = element
+        if (element == '-' && firstOperand.includes('-') || element == '-' && firstOperand){
+            operator = element;
         } else if (numbers.includes(element) && !operator) {
             firstOperand += element;
             if (firstOperand.includes('.')) {floatingPointBtn.disabled = true};
@@ -94,3 +94,5 @@ clearBtn.addEventListener('click', () => {
     display.textContent = '';
     floatingPointBtn.disabled = false;
 })
+
+let backspaceBtn = document.querySelector('#backspace');
