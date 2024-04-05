@@ -149,3 +149,23 @@ backspaceBtn.addEventListener('click', () => {
     display.value = displayAsArray.join('');
     event.stopPropagation();
 })
+
+buttons.forEach((button) => {
+    button.addEventListener('mouseenter', () => {
+        button.style.opacity = '70%'
+    })
+    button.addEventListener('mouseout', () => {
+        button.style.opacity = '100%'
+    })
+})
+
+let functionBtns = document.querySelectorAll('.function-button');
+
+functionBtns.forEach((button) => {
+    button.addEventListener('mouseenter', () => {
+        button.style.opacity = '70%'
+    })
+    button.addEventListener('mouseout', () => {
+        button.style.opacity = '100%'
+    })
+})

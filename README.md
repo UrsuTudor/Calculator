@@ -14,3 +14,4 @@ Adding keyboard support and figuring out a way to make both it and the regular b
 * Handles decimal numbers
 * Supports basic memory operations (clear, delete last input)
 * Keyboard support 
+* In the future, I would like to make it so that the input only accepts numbers and operators; for now, it takes letters and other symbols too
