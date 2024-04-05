@@ -50,9 +50,10 @@ function regulateDecimals(keyPressed) {
     if (keyPressed.keyCode == 189 || keyPressed.keyCode == 187 || keyPressed.keyCode == 191 || keyPressed.keyCode == 56) {
         decimalCount = 0;
     }
-    if (!operationElements[1].toString().includes('.') && keyPressed.keyCode == 8) {
+    if (!operationElements[1].toString().includes('.') && keyPressed.keyCode == 8 && !displayValue.includes('.')) {
         decimalCount = 0;
-    }
+        console.log(decimalCount)
+    } else if (operationElements[1].toString().includes('.') && operationElements[0] == undefined) {decimalCount = 1;}
 }
 
 display.addEventListener('keyup', (keyPressed) => {
