@@ -36,9 +36,19 @@ function operate(operator, firstOperand, secondOperand) {
 const buttons = document.querySelectorAll('.operation-button');
 const display = document.querySelector('#display');
 let displayValue;
+let decimalCount = 0
 
 display.addEventListener('keyup', (keyPressed) => {
     if (!event.shiftKey && keyPressed.keyCode == 187) {getResult()};
+
+    if (keyPressed.keyCode == 190) {decimalCount++};
+    console.log(decimalCount)
+    if (decimalCount > 1 && keyPressed.keyCode == 190) {
+        displayValue = Array.from(display.value);
+        displayValue.pop();
+        display.value = displayValue.join('')
+    }
+
     displayValue = display.value;
     getOperationElements(displayValue);
     console.log(keyPressed.keyCode)
@@ -74,7 +84,10 @@ function getOperationElements(string) {
             operator = element;
         } else if (numbers.includes(element) && !operator) {
             firstOperand += element;
-            if (firstOperand.includes('.')) {floatingPointBtn.disabled = true};
+            if (firstOperand.includes('.')) {
+                floatingPointBtn.disabled = true;
+                decimalCount++;
+            };
         } else if (!numbers.includes(element)) {
             operator = element;
             floatingPointBtn.disabled = false;
